@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Faiq | Informatics Student & Developer</title>
+  <meta name="description" content="Portfolio of Faiq, an Informatics student building web, mobile and AI projects.">
+  <meta name="theme-color" content="#0d0d0b">
+
+  <!-- Social preview (WhatsApp, LinkedIn, X, Instagram DM, etc.) -->
+  <!-- TODO setelah deploy: ganti GANTI-DOMAIN-KAMU dengan domain asli, dan taruh og-image.png (1200x630) di folder yang sama -->
+  <meta property="og:title" content="Faiq | Informatics Student & Developer">
+  <meta property="og:description" content="Web, mobile and AI projects by Faiq.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://GANTI-DOMAIN-KAMU/">
+  <meta property="og:image" content="https://GANTI-DOMAIN-KAMU/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div class="loader" aria-hidden="true">
+    <div class="loader__top mono"><span>Portfolio</span><span>2026</span></div>
+    <div class="loader__count"><span id="count">0</span><sup>%</sup></div>
+    <div class="loader__bar"><i></i></div>
+  </div>
+
+  <div class="cursor" aria-hidden="true"><span></span></div>
+
+  <header class="nav">
+    <a href="#top" class="nav__logo" data-magnetic>Faiq<span>®</span></a>
+    <nav class="nav__links mono">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav__time mono"><i class="dot"></i><span id="clock">--:--</span> WIB</div>
+  </header>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero">
+      <p class="eyebrow mono reveal">Informatics student · Yogyakarta, ID</p>
+      <h1 class="hero__title" aria-label="Hi, I'm Faiq. I build web, mobile and AI things.">
+        <span class="line"><span>Hi, I'm Faiq.</span></span>
+        <span class="line"><span>I build <em>web, mobile</em></span></span>
+        <span class="line"><span>&amp; <em>AI</em> things.</span></span>
+      </h1>
+      <div class="hero__foot">
+        <p class="hero__desc reveal">
+          Semester 7 S1 Informatika at Universitas Amikom Yogyakarta. I turn ideas into working
+          apps, from Laravel back-ends and Flutter apps to deep learning models.
+        </p>
+        <a href="#work" class="hero__scroll mono reveal" data-magnetic>
+          Scroll <span class="arrow">↓</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- MARQUEE (16 items = 32 children, a multiple of 4; script.js duplicates the set for a seamless loop) -->
+    <section class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>Flutter</span><i>✦</i><span>Dart</span><i>✦</i><span>Laravel</span><i>✦</i><span>PHP</span><i>✦</i>
+        <span>MySQL</span><i>✦</i><span>REST API</span><i>✦</i><span>Python</span><i>✦</i><span>TensorFlow</span><i>✦</i>
+        <span>Deep Learning</span><i>✦</i><span>MobileNetV2</span><i>✦</i><span>Data Analysis</span><i>✦</i><span>JavaScript</span><i>✦</i>
+        <span>Git</span><i>✦</i><span>PHPUnit</span><i>✦</i><span>Blade</span><i>✦</i><span>Flask</span><i>✦</i>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section class="work" id="work">
+      <div class="section-head">
+        <h2 class="section-title">Selected <em>works</em></h2>
+        <p class="mono">(07) · hover to read more</p>
+      </div>
+
+      <ul class="projects">
+
+        <li class="project">
+          <div class="project__row" tabindex="0">
+            <span class="project__num mono">01</span>
+            <span class="project__name">Auto2000 Content System</span>
+            <span class="project__tag mono">Web · Laravel · Internship</span>
+            <span class="project__year mono">2026</span>
+            <span class="project__desc">An internal web app that turns scattered spreadsheets and chat files into one content approval workflow.</span>
+            <div class="project__more"><div class="project__more-inner">
+              <p class="project__long">
+                My internship project: an internal web application for Auto2000 Soekarno-Hatta, a Toyota dealership branch,
+                replacing content plans and documents that used to live in spreadsheets and chat groups.
+                Teams submit content, review it, request revisions, and approve it, with a shared calendar,
+                notifications, search, and downloadable documents. Access is role-based for content creators,
+                the branch head, customer relations, and sales, and an information center keeps PDFs, images,
+                Word files, and videos together with optional captions. It is built with Laravel and MySQL
+                and checked with automated PHPUnit tests and 30 black-box test scenarios.
+              </p>
+              <ul class="project__stack mono">
+                <li>Laravel</li><li>PHP</li><li>Blade</li><li>MySQL</li><li>RBAC</li><li>Vite</li><li>PHPUnit</li>
+              </ul>
+            </div></div>
+          </div>
+        </li>
+
+        <li class="project">
+          <div class="project__row" tabindex="0">
+            <span class="project__num mono">02</span>
+            <span class="project__name">Auto2000 Customer App + API</span>
+            <span class="project__tag mono">Mobile · Flutter + Laravel</span>
+            <span class="project__year mono">2026</span>
+            <span class="project__desc">A Flutter prototype for car buyers, powered by a Laravel REST API I built and tested separately.</span>
+            <div class="project__more"><div class="project__more-inner">
+              <p class="project__long">
+                A prototype customer app for Auto2000 Soekarno-Hatta, a Toyota dealership branch, built with Flutter and backed by its own
+                Laravel REST API. The flow covers new and used cars, promos, service booking with coupons,
+                accessories, spare parts, trade-in requests, and test drive booking. On the backend I worked on
+                Sanctum authentication, the end-to-end booking and coupon flow, a trade-in scheme that assigns
+                requests to sales staff, and saved promos that persist per user instead of living only in the
+                app's memory. The app is covered by Flutter tests and a CI pipeline, and the API by
+                access-control security tests.
+              </p>
+              <ul class="project__stack mono">
+                <li>Flutter</li><li>Dart</li><li>Laravel</li><li>Sanctum</li><li>MySQL</li><li>REST API</li><li>CI</li>
+              </ul>
+            </div></div>
+          </div>
+        </li>
+
+        <li class="project">
+          <div class="project__row" tabindex="0">
+            <span class="project__num mono">03</span>
+            <span class="project__name">Auto2000 Dealer Website &amp; Admin</span>
+            <span class="project__tag mono">Web · Laravel · MySQL</span>
+            <span class="project__year mono">2026</span>
+            <span class="project__desc">A dealership site with a vehicle catalog, online booking, promotions, and an admin dashboard.</span>
+            <div class="project__more"><div class="project__more-inner">
+              <p class="project__long">
+                A website for an Auto2000 dealership, with a vehicle catalog that includes variants, colors, and photo galleries,
+                plus online booking, inquiries, articles, and promotions. An admin dashboard manages the content
+                and moves booking requests through four statuses: pending, approved, completed, and cancelled.
+                I built the pages, models, and migrations behind the catalog, booking, article, and promotion
+                features, and spent a good part of the work debugging backend logic along with the front-end
+                behavior of the gallery and color picker.
+              </p>
+              <ul class="project__stack mono">
+                <li>Laravel</li><li>PHP</li><li>Blade</li><li>JavaScript</li><li>MySQL</li><li>Migrations</li>
+              </ul>
+            </div></div>
+          </div>
+        </li>
+
+        <li class="project">
+          <div class="project__row" tabindex="0">
+            <span class="project__num mono">04</span>
+            <span class="project__name">TomatoScan</span>
+            <span class="project__tag mono">Computer Vision · Thesis</span>
+            <span class="project__year mono">2026</span>
+            <span class="project__desc">Tomato plant disease classification using MobileNetV2.</span>
+            <div class="project__more"><div class="project__more-inner">
+              <p class="project__long">
+                The subject of my undergraduate thesis: a multi-class classifier that recognizes tomato leaf
+                diseases from digital images, built on the lightweight MobileNetV2 architecture. Training uses a
+                three-phase progressive fine-tuning strategy on a balanced 10-class dataset of about 11,000
+                images, as a lighter alternative to heavier ensemble approaches in earlier research. A related
+                Data Mining course version became an end-to-end pipeline, from training in Google Colab with
+                MLflow experiment tracking to a Flask web app for trying the model.
+              </p>
+              <ul class="project__stack mono">
+                <li>Python</li><li>TensorFlow</li><li>MobileNetV2</li><li>Transfer Learning</li><li>MLflow</li><li>Flask</li>
+              </ul>
+            </div></div>
+          </div>
+        </li>
+
+        <li class="project">
+          <div class="project__row" tabindex="0">
+            <span class="project__num mono">05</span>
+            <span class="project__name">Batik Motif Classifier</span>
+            <span class="project__tag mono">Deep Learning · CNN</span>
+            <span class="project__year mono">2026</span>
+            <span class="project__desc">A CNN model that recognizes batik motifs from images.</span>
+            <div class="project__more"><div class="project__more-inner">
+              <p class="project__long">
+                Final project for my Artificial Intelligence course: a convolutional neural network that
+                classifies traditional Indonesian batik motifs. The model is a 4-layer CNN trained for 50
+                epochs, with zoom and shear augmentation to help it generalize across different pattern
+                variations. I built and ran the whole workflow in Google Colab and analyzed the results
+                for a recorded presentation.
+              </p>
+              <ul class="project__stack mono">
+                <li>CNN</li><li>Python</li><li>Data Augmentation</li><li>Google Colab</li>
+              </ul>
+            </div></div>
+          </div>
+        </li>
+
+        <li class="project">
+          <div class="project__row" tabindex="0">
+            <span class="project__num mono">06</span>
+            <span class="project__name">Shanakra CV Mugijaya</span>
+            <span class="project__tag mono">Web · Team project</span>
+            <span class="project__year mono">2026</span>
+            <span class="project__desc">Warehouse and driver management features, built in a team and shipped via GitLab.</span>
+            <div class="project__more"><div class="project__more-inner">
+              <p class="project__long">
+                A group project for a company system where I took on the warehouse and driver management
+                features. My part was adding these modules to the team's existing codebase, which meant
+                reading other people's code, matching its structure, and keeping changes clean enough to merge.
+                We collaborated through GitLab, pushing and reviewing work as a team.
+              </p>
+              <ul class="project__stack mono">
+                <li>PHP</li><li>GitLab</li><li>Team Collaboration</li>
+              </ul>
+            </div></div>
+          </div>
+        </li>
+
+        <li class="project">
+          <div class="project__row" tabindex="0">
+            <span class="project__num mono">07</span>
+            <span class="project__name">Rice Production Analysis</span>
+            <span class="project__tag mono">Data Analysis · Sumatra</span>
+            <span class="project__year mono">2026</span>
+            <span class="project__desc">Analysis of rice production data across Sumatra, presented and defended in interview.</span>
+            <div class="project__more"><div class="project__more-inner">
+              <p class="project__long">
+                A data analysis of rice production across Sumatra, looking at which factors actually move
+                harvest results. I worked with a regional rice crop dataset and used correlation analysis
+                and regression to measure relationships and identify the influencing factors. The work was
+                presented and then defended in a one-on-one interview.
+              </p>
+              <ul class="project__stack mono">
+                <li>Correlation</li><li>Regression</li><li>Data Analysis</li>
+              </ul>
+            </div></div>
+          </div>
+        </li>
+
+      </ul>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+      <p class="mono about__label">(About)</p>
+
+      <div class="about__layout">
+        <p class="about__text" id="aboutText">
+          I'm an Informatics student who enjoys the whole pipeline: training a model, wiring up a database,
+          shipping the interface people actually touch, and testing it before it goes out. I learn by
+          building real things, from coursework and team projects to internship work.
+        </p>
+
+        <!-- FOTO: simpan fotomu sebagai faiq.jpg di folder yang sama dengan index.html (potret 4:5, lebar sekitar 900px). Kalau file belum ada, tampil placeholder huruf F. -->
+        <figure class="about__photo">
+          <div class="about__frame">
+            <span class="about__ph" aria-hidden="true">F</span>
+            <img src="faiq.jpg" alt="Portrait of Faiq" width="800" height="1000" loading="lazy" onerror="this.remove()">
+          </div>
+          <figcaption class="mono"><span>Faiq</span><span>Yogyakarta, ID</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="facts">
+        <div class="fact">
+          <span class="mono">Studying</span>
+          <p>S1 Informatika, Universitas Amikom Yogyakarta</p>
+        </div>
+        <div class="fact">
+          <span class="mono">Focus</span>
+          <p>Web &amp; mobile apps, back-end APIs, deep learning, data analysis</p>
+        </div>
+      </div>
+
+      <div class="toolbox">
+        <p class="mono about__label">(Toolbox)</p>
+        <div class="toolbox__grid">
+          <div class="tool-group">
+            <h3 class="mono">Mobile</h3>
+            <ul><li>Flutter</li><li>Dart</li><li>REST API Integration</li><li>Flutter Testing</li><li>UI/UX Prototyping</li></ul>
+          </div>
+          <div class="tool-group">
+            <h3 class="mono">Web</h3>
+            <ul><li>Laravel</li><li>PHP</li><li>Blade</li><li>Eloquent ORM</li><li>Laravel Sanctum</li><li>REST API</li><li>RBAC</li><li>Flask</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Vite</li><li>Responsive Design</li></ul>
+          </div>
+          <div class="tool-group">
+            <h3 class="mono">AI &amp; Data</h3>
+            <ul><li>Python</li><li>TensorFlow</li><li>CNN</li><li>MobileNetV2</li><li>Deep Learning</li><li>Transfer Learning</li><li>Computer Vision</li><li>Data Mining</li><li>Data Analysis</li><li>Google Colab</li><li>MLflow</li></ul>
+          </div>
+          <div class="tool-group">
+            <h3 class="mono">Database &amp; Tools</h3>
+            <ul><li>MySQL</li><li>MariaDB</li><li>SQL</li><li>Database Design</li><li>Migrations</li><li>Git</li><li>GitHub</li><li>GitLab</li><li>VS Code</li><li>XAMPP</li><li>Composer</li><li>npm</li><li>PHPUnit</li><li>CI Pipeline</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CONTACT -->
+  <footer class="contact" id="contact">
+    <p class="mono about__label">(Contact)</p>
+    <h2 class="contact__title">Let's build<br><em>something</em> together.</h2>
+    <a class="contact__mail" href="mailto:mfaiqzacky@gmail.com" data-magnetic>mfaiqzacky@gmail.com</a>
+    <div class="contact__row mono">
+      <a href="https://www.linkedin.com/in/muhammad-faiq-zacky" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://www.instagram.com/fqzcky" target="_blank" rel="noopener">Instagram ↗</a>
+    </div>
+    <div class="contact__foot mono">
+      <span>© <span id="year">2026</span> Faiq</span>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
