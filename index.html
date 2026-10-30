@@ -3,9 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Faiq | Informatics Student & Developer</title>
+  <title>Muhammad Faiq Zacky | Portofolio & Lab</title>
   <meta name="description" content="Portfolio of Faiq, an Informatics student building web, mobile and AI projects.">
   <meta name="theme-color" content="#0d0d0b">
+
+  <link rel="icon" type="image/png" href="faiq.jpg"/>
+
 
   <!-- Social preview (WhatsApp, LinkedIn, X, Instagram DM, etc.) -->
   <!-- Social preview image: place og-image.png (1200x630) in this directory. -->
@@ -18,10 +21,17 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
 
+  <!-- Favicon: a square crop of your photo (512 x 512 px), saved as favicon.png next to index.html -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- Icons used in the toolbox (only the 4 icons needed, so the download stays tiny) -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=database,language,neurology,phone_iphone&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="extras.css">
   <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -43,7 +53,20 @@
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav__time mono"><i class="dot"></i><span id="clock">--:--</span> WIB</div>
+    <button class="nav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
   </header>
+
+  <!-- Mobile menu (opened by the three-line button) -->
+  <div class="menu" id="menu" aria-hidden="true">
+    <nav class="menu__links" aria-label="Main menu">
+      <a href="#work"><span class="mono">01</span>Work</a>
+      <a href="#about"><span class="mono">02</span>About</a>
+      <a href="#contact"><span class="mono">03</span>Contact</a>
+    </nav>
+    <p class="menu__foot mono">Yogyakarta, ID · <a href="mailto:mfaiqzacky@gmail.com">mfaiqzacky@gmail.com</a></p>
+  </div>
 
   <main id="top">
 
@@ -55,6 +78,27 @@
         <span class="line"><span>I build <em>web, mobile</em></span></span>
         <span class="line"><span>&amp; <em>AI</em> things.</span></span>
       </h1>
+
+      <aside class="term reveal" aria-label="A quick intro, styled as a terminal">
+        <span class="term__chip term__chip--a" aria-hidden="true"><b>Flutter</b></span>
+        <span class="term__chip term__chip--b" aria-hidden="true"><b>Laravel</b></span>
+        <span class="term__chip term__chip--c" aria-hidden="true"><b>TensorFlow</b></span>
+        <div class="term__win">
+          <div class="term__bar" aria-hidden="true"><i></i><i></i><i></i><span class="mono">: ~</span></div>
+          <div class="term__body mono" data-type>
+            <p class="t-cmd">whoami</p>
+            <p class="t-out">Muhammad Faiq Zacky</p>
+            <p class="t-cmd">ls projects/</p>
+            <p class="t-out">auto2000-content  auto2000-app  tomatoscan  batik-cnn & more</p>
+            <p class="t-cmd">cat stack.txt</p>
+            <p class="t-out">flutter  laravel  tensorflow  mysql etc</p>
+            <p class="t-cmd">status --open</p>
+            <p class="t-out t-ok">open to projects &amp; roles ✓</p>
+            <p class="t-cmd t-last"><span class="term__cursor" aria-hidden="true"></span></p>
+          </div>
+        </div>
+      </aside>
+
       <div class="hero__foot">
         <p class="hero__desc reveal">
           I’m a seventh-semester Informatics student at Universitas Amikom Yogyakarta. I turn ideas into working
@@ -73,6 +117,20 @@
         <span>MySQL</span><i>✦</i><span>REST API</span><i>✦</i><span>Python</span><i>✦</i><span>TensorFlow</span><i>✦</i>
         <span>Deep Learning</span><i>✦</i><span>MobileNetV2</span><i>✦</i><span>Data Analysis</span><i>✦</i><span>JavaScript</span><i>✦</i>
         <span>Git</span><i>✦</i><span>PHPUnit</span><i>✦</i><span>Blade</span><i>✦</i><span>Flask</span><i>✦</i>
+      </div>
+    </section>
+
+    <!-- PORTRAIT: dithered 1-bit photo that the cursor (or a finger) burns back to colour -->
+    <section class="veil" id="portrait" aria-label="Portrait of Faiq">
+      <div class="veil__text">
+        <p class="mono veil__label">(Portrait)</p>
+        <h2 class="veil__title">Move closer,<br><em>burn through.</em></h2>
+        <p class="veil__sub">A 1-bit photo of me. Your cursor burns it back to full colour, then it knits itself shut again, cell by cell.</p>
+        <p class="mono veil__hint"><span class="js-veil-hint">hover</span> the photo ↘</p>
+      </div>
+      <div class="veil__stage">
+        <img class="veil__img" src="faiq.jpeg" alt="Portrait of Faiq" width="800" height="1000" loading="lazy" onerror="this.closest('.veil').remove()">
+        <canvas class="veil__canvas" aria-hidden="true"></canvas>
       </div>
     </section>
 
@@ -251,21 +309,12 @@
       <p class="mono about__label">(About)</p>
 
       <div class="about__layout">
+        <div class="about__main">
         <p class="about__text" id="aboutText">
           I'm an Informatics student who enjoys the whole pipeline: training a model, wiring up a database,
           shipping the interface people actually touch, and testing it before it goes out. I learn by
           building real things, from coursework and team projects to internship work.
         </p>
-
-        <!-- FOTO: simpan fotomu sebagai faiq.jpg di folder yang sama dengan index.html (potret 4:5, lebar sekitar 900px). Kalau file belum ada, tampil placeholder huruf F. -->
-        <figure class="about__photo">
-          <div class="about__frame">
-            <span class="about__ph" aria-hidden="true">F</span>
-            <img src="faiq.jpg" alt="Portrait of Faiq" width="800" height="1000" loading="lazy" onerror="this.remove()">
-          </div>
-          <figcaption class="mono"><span>Faiq</span><span>Yogyakarta, ID</span></figcaption>
-        </figure>
-      </div>
 
       <div class="facts">
         <div class="fact">
@@ -277,24 +326,48 @@
           <p>Web &amp; mobile apps, back-end APIs, deep learning, data analysis</p>
         </div>
       </div>
+        </div>
+
+        <div class="lanyard__slot" aria-hidden="true"></div>
+
+        <!-- Draggable ID badge on a lanyard. Photo: faiq.jpg next to index.html (portrait, about 600 px wide). -->
+        <div class="lanyard" id="lanyard">
+          <canvas class="lanyard__canvas" aria-hidden="true"></canvas>
+          <div class="badge" role="img" aria-label="Draggable ID badge of Faiq, hanging from a lanyard">
+            <div class="badge__clip" aria-hidden="true"></div>
+            <div class="badge__body">
+              <div class="badge__top mono"><span>Faiq®</span><span class="badge__id">2026</span></div>
+              <div class="badge__photo">
+                <span class="badge__ph" aria-hidden="true">F</span>
+                <img src="faiq.jpg" alt="" width="600" height="600" loading="lazy" draggable="false" onerror="this.remove()">
+              </div>
+              <div class="badge__name">Faiq</div>
+              <div class="badge__role">Informatics student<br>Web · Mobile · AI</div>
+              <div class="badge__foot mono"><span>DRAG ME TO READ</span><i class="badge__bars" aria-hidden="true"></i></div>
+              <i class="badge__shine" aria-hidden="true"></i>
+            </div>
+          </div>
+          <p class="lanyard__hint mono" aria-hidden="true">drag me · double-tap to reset</p>
+        </div>
+      </div>
 
       <div class="toolbox">
         <p class="mono about__label">(Toolbox)</p>
         <div class="toolbox__grid">
           <div class="tool-group">
-            <h3 class="mono">Mobile</h3>
+            <h3 class="mono"><span class="material-symbols-outlined" aria-hidden="true">phone_iphone</span>Mobile</h3>
             <ul><li>Flutter</li><li>Dart</li><li>REST API Integration</li><li>Flutter Testing</li><li>UI/UX Prototyping</li></ul>
           </div>
           <div class="tool-group">
-            <h3 class="mono">Web</h3>
+            <h3 class="mono"><span class="material-symbols-outlined" aria-hidden="true">language</span>Web</h3>
             <ul><li>Laravel</li><li>PHP</li><li>Blade</li><li>Eloquent ORM</li><li>Laravel Sanctum</li><li>REST API</li><li>RBAC</li><li>Flask</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Vite</li><li>Responsive Design</li></ul>
           </div>
           <div class="tool-group">
-            <h3 class="mono">AI &amp; Data</h3>
+            <h3 class="mono"><span class="material-symbols-outlined" aria-hidden="true">neurology</span>AI &amp; Data</h3>
             <ul><li>Python</li><li>TensorFlow</li><li>CNN</li><li>MobileNetV2</li><li>Deep Learning</li><li>Transfer Learning</li><li>Computer Vision</li><li>Data Mining</li><li>Data Analysis</li><li>Google Colab</li><li>MLflow</li></ul>
           </div>
           <div class="tool-group">
-            <h3 class="mono">Database &amp; Tools</h3>
+            <h3 class="mono"><span class="material-symbols-outlined" aria-hidden="true">database</span>Database &amp; Tools</h3>
             <ul><li>MySQL</li><li>MariaDB</li><li>SQL</li><li>Database Design</li><li>Migrations</li><li>Git</li><li>GitHub</li><li>GitLab</li><li>VS Code</li><li>XAMPP</li><li>Composer</li><li>npm</li><li>PHPUnit</li><li>CI Pipeline</li></ul>
           </div>
         </div>
@@ -307,6 +380,7 @@
   <footer class="contact" id="contact">
     <p class="mono about__label">(Contact)</p>
     <h2 class="contact__title">Let's build<br><em>something</em> together.</h2>
+    <p class="contact__lead">Have an engineering project, mobile app idea, or open role? Hit my inbox and let's bring it to reality.</p>
     <a class="contact__mail" href="mailto:mfaiqzacky@gmail.com" data-magnetic>mfaiqzacky@gmail.com</a>
     <div class="contact__row mono">
       <a href="https://www.linkedin.com/in/muhammad-faiq-zacky" target="_blank" rel="noopener">LinkedIn ↗</a>
@@ -314,6 +388,7 @@
     </div>
     <div class="contact__foot mono">
       <span>© <span id="year">2026</span> Faiq</span>
+      <a href="https://www.google.com/maps/place/Yogyakarta" target="_blank" rel="noopener">Based In YK</a>
       <a href="#top">Back to top ↑</a>
     </div>
   </footer>
@@ -322,5 +397,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
   <script src="script.js"></script>
+  <script src="extras.js"></script>
 </body>
 </html>

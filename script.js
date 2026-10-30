@@ -118,16 +118,6 @@
     scrollTrigger: { trigger: '.toolbox', start: 'top 85%' }
   });
 
-  // Photo reveal (wipes up, image settles from a slight zoom)
-  gsap.fromTo('.about__frame',
-    { clipPath: 'inset(100% 0% 0% 0%)' },
-    { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'expo.out',
-      scrollTrigger: { trigger: '.about__photo', start: 'top 85%' } });
-  gsap.from('.about__frame img', {
-    scale: 1.25, duration: 1.8, ease: 'expo.out',
-    scrollTrigger: { trigger: '.about__photo', start: 'top 85%' }
-  });
-
   gsap.from('.section-title', {
     y: 60, opacity: 0, duration: 1.1, ease: 'expo.out',
     scrollTrigger: { trigger: '.section-title', start: 'top 85%' }
