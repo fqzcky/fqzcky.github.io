@@ -260,6 +260,17 @@ body::after {
 .contact__row { display: flex; gap: 32px; flex-wrap: wrap; margin-top: 56px; color: var(--muted); }
 .contact__row a:hover { color: var(--fg); }
 .contact__foot { display: flex; justify-content: space-between; margin-top: 110px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted); }
+.contact__inbox-link {
+  color: inherit; /* Mengikuti warna teks bawaan paragraph agar tidak berubah biru/ungu default link */
+  text-decoration: underline;
+  text-decoration-color: #ff5722; text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.contact__inbox-link:hover {
+  opacity: 0.8; /* Memberikan sedikit efek umpan balik visual saat di-hover cursor */
+}
 
 /* Reveal fallback (when GSAP fails to load, content stays visible) */
 html.js.gsap-ready .reveal { opacity: 0; }
