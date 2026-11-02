@@ -1,0 +1,102 @@
+/* Arc Cursor — standalone default cursor. Target Cursor remains controlled by script.js. */
+.arc-cursor {
+  position: fixed;
+  z-index: 94;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  display: none;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(-50%, -50%, 0);
+  transition: opacity .16s ease, visibility .16s ease;
+  mix-blend-mode: screen;
+}
+.arc-cursor.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+.arc-cursor.is-over-target {
+  opacity: 0;
+  visibility: hidden;
+}
+.arc-cursor__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  animation: arc-cursor-rotate 8s linear infinite;
+}
+.arc-cursor__segment {
+  fill: none;
+  stroke: #f1ebe1;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-dasharray: 17 8 4 11;
+  filter: drop-shadow(0 0 2px rgba(241,235,225,.55));
+  animation: arc-cursor-flicker 1.1s steps(2, end) infinite alternate;
+}
+.arc-cursor__segment--warm {
+  stroke: #ff6845;
+  stroke-dasharray: 10 12 3 9;
+  animation-delay: -.35s;
+}
+.arc-cursor__segment--bright {
+  stroke: #fff;
+  stroke-dasharray: 7 9 3 13;
+  animation-delay: -.7s;
+}
+.arc-cursor__bolt {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 3px rgba(255,255,255,.85));
+  animation: arc-cursor-flicker .48s steps(2, end) infinite alternate;
+}
+.arc-cursor__bolt--warm {
+  stroke: #ff6845;
+  animation-delay: -.22s;
+}
+.arc-cursor__center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #f1ebe1;
+  box-shadow: 0 0 5px rgba(241,235,225,.8), 0 0 12px rgba(255,104,69,.28);
+  transform: translate(-50%, -50%);
+}
+@keyframes arc-cursor-rotate {
+  to { transform: rotate(360deg); }
+}
+@keyframes arc-cursor-flicker {
+  0% { opacity: .42; }
+  38% { opacity: 1; }
+  62% { opacity: .58; }
+  100% { opacity: .94; }
+}
+
+/* Hide the reticle at rest; script.js still exclusively controls its target state. */
+@media (hover: hover) and (pointer: fine) {
+  .arc-cursor { display: block; }
+  .cursor {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .14s ease, visibility .14s ease;
+  }
+  .cursor.is-target {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .arc-cursor__svg,
+  .arc-cursor__segment,
+  .arc-cursor__bolt { animation: none; }
+}
