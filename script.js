@@ -226,32 +226,67 @@
     scrollTrigger: { trigger: '.contact', start: 'top 70%' }
   });
 
-  // ---------- Cursor and magnetic buttons ----------
-  if (finePointer) {
+  // ---------- Target Cursor: corner reticle locks onto interactive elements ----------
+  if (finePointer && hasGsap) {
     const cursor = $('.cursor');
+    const frame = $('.cursor__frame', cursor);
+    const cursorX = gsap.quickTo(cursor, 'x', { duration: .22, ease: 'power3.out' });
+    const cursorY = gsap.quickTo(cursor, 'y', { duration: .22, ease: 'power3.out' });
+    let activeTarget = null;
 
-    const cx = gsap.quickTo(cursor, 'x', { duration: .25, ease: 'power3' });
-    const cy = gsap.quickTo(cursor, 'y', { duration: .25, ease: 'power3' });
+    const cursorTargets = $$('a, button, .project__row, [data-cursor-target]');
+    cursorTargets.forEach(el => el.classList.add('cursor-target'));
+
+    const setTarget = el => {
+      if (activeTarget === el) return;
+      activeTarget = el;
+      const rect = el.getBoundingClientRect();
+      gsap.to(frame, {
+        width: Math.max(34, rect.width + 16),
+        height: Math.max(34, rect.height + 16),
+        duration: .24,
+        ease: 'power3.out',
+        overwrite: true
+      });
+      cursor.classList.add('is-target');
+    };
+
+    const clearTarget = el => {
+      if (activeTarget !== el) return;
+      activeTarget = null;
+      gsap.to(frame, {
+        width: 34,
+        height: 34,
+        duration: .2,
+        ease: 'power3.out',
+        overwrite: true
+      });
+      cursor.classList.remove('is-target');
+    };
 
     window.addEventListener('mousemove', e => {
-      cx(e.clientX); cy(e.clientY);
+      cursorX(e.clientX);
+      cursorY(e.clientY);
+      if (activeTarget) {
+        const rect = activeTarget.getBoundingClientRect();
+        gsap.to(frame, {
+          width: Math.max(34, rect.width + 16),
+          height: Math.max(34, rect.height + 16),
+          duration: .12,
+          ease: 'power2.out',
+          overwrite: true
+        });
+      }
     });
 
-    $$('a, [data-magnetic]').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('is-link'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('is-link'));
+    cursorTargets.forEach(el => {
+      el.addEventListener('mouseenter', () => setTarget(el));
+      el.addEventListener('mouseleave', () => clearTarget(el));
+      el.addEventListener('focus', () => setTarget(el));
+      el.addEventListener('blur', () => clearTarget(el));
     });
 
-    $$('[data-magnetic]').forEach(el => {
-      const mx = gsap.quickTo(el, 'x', { duration: .5, ease: 'power3' });
-      const my = gsap.quickTo(el, 'y', { duration: .5, ease: 'power3' });
-      el.addEventListener('mousemove', e => {
-        const r = el.getBoundingClientRect();
-        mx((e.clientX - (r.left + r.width / 2)) * .3);
-        my((e.clientY - (r.top + r.height / 2)) * .3);
-      });
-      el.addEventListener('mouseleave', () => { mx(0); my(0); });
-    });
+    gsap.set(cursor, { x: -100, y: -100 });
   }
 
   window.addEventListener('load', () => ScrollTrigger.refresh());
