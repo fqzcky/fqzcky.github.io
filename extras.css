@@ -460,3 +460,19 @@ html.js body .veil__canvas { cursor: none; }
 @media (prefers-reduced-motion: reduce) {
   .contact__globe { animation: none; }
 }
+
+
+/* Brighter globe separation: visible earth, warm atmospheric halo, crisp silhouette. */
+.contact__globe-wrap {
+  background: radial-gradient(ellipse at 50% 49%,
+    rgba(255, 111, 73, .15) 0%,
+    rgba(255, 111, 73, .07) 43%,
+    transparent 72%);
+  filter: drop-shadow(0 0 26px rgba(255, 111, 73, .12));
+}
+.contact__globe {
+  isolation: isolate;
+}
+.contact__globe canvas {
+  filter: contrast(1.12) brightness(1.12) saturate(1.08);
+}
