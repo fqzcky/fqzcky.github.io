@@ -19,6 +19,10 @@
   const marqueeTrack = $('.marquee__track');
   marqueeTrack.innerHTML += marqueeTrack.innerHTML;
 
+  // Duplicate the complete technology set once for a seamless 50% marquee loop.
+  const techLoopTrack = $('.tech-loop__track');
+  if (techLoopTrack) techLoopTrack.innerHTML += techLoopTrack.innerHTML;
+
   // ---------- Split "about" text into words ----------
   const about = $('#aboutText');
   about.innerHTML = about.textContent.trim().split(/\s+/)
