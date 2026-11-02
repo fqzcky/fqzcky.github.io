@@ -337,9 +337,13 @@ html.js body .veil__canvas { cursor: none; }
 
 /* ---------- Target Cursor reticle ---------- */
 .cursor {
-  z-index: 95;
+  z-index: 96;
   display: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .14s ease, visibility .14s ease;
 }
+.cursor.is-target { opacity: 1; visibility: visible; }
 .cursor__frame {
   position: absolute;
   top: 0;
@@ -377,7 +381,8 @@ html.js body .veil__canvas { cursor: none; }
 }
 @media (hover: hover) and (pointer: fine) {
   .cursor { display: block; }
-  html.js body, html.js a, html.js button { cursor: none; }
+  .arc-cursor { display: block; }
+  html.js body, html.js a, html.js button, html.js [role="button"] { cursor: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cursor__frame { animation: none; }
