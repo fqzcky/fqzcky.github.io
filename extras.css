@@ -478,10 +478,42 @@ html.js body .veil__canvas { cursor: none; }
 }
 
 
-/* ---------- Tech Text character treatment: preserve original typography ---------- */
-[data-tech-text] .tech-char { display: inline; white-space: pre; }
-[data-tech-text].tech-text-running { text-shadow: 0 0 14px rgba(255, 255, 255, .16); }
-[data-tech-text].tech-text-running em .tech-char { text-shadow: 0 0 12px rgba(255, 87, 34, .24); }
+
+
+/* ---------- Tech Text: hover a letter to reveal its vector-like outline ---------- */
+[data-tech-text] { display: inline; cursor: crosshair; }
+[data-tech-text] .tech-char {
+  position: relative;
+  display: inline-block;
+  white-space: pre;
+  transition: color .12s ease, -webkit-text-stroke-color .12s ease, text-shadow .12s ease;
+}
+[data-tech-text] .tech-char.is-active {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1.15px currentColor;
+  text-shadow: 0 0 9px rgba(255,255,255,.16);
+  outline: 1px dashed currentColor;
+  outline-offset: 3px;
+}
+[data-tech-text] .tech-char.is-active::before {
+  content: attr(data-char);
+  position: absolute;
+  left: -1px;
+  top: -1px;
+  color: transparent;
+  -webkit-text-stroke: .45px currentColor;
+  opacity: .38;
+  pointer-events: none;
+}
+[data-tech-text] .tech-char:focus-visible { outline: 1px dashed currentColor; outline-offset: 3px; }
+@media (hover: none), (pointer: coarse) {
+  [data-tech-text] { cursor: auto; }
+  [data-tech-text] .tech-char.is-active {
+    color: inherit; -webkit-text-fill-color: currentColor;
+    -webkit-text-stroke: 0; outline: 0; text-shadow: none;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  [data-tech-text] .tech-char { text-shadow: none !important; }
+  [data-tech-text] .tech-char { transition: none; }
 }
