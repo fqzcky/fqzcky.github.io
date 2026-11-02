@@ -513,4 +513,93 @@
       tid = setTimeout(() => { fit(); if (stage.clientWidth !== lastW) { build(); kick(); } }, 200);
     });
   });
+
+  // ---------- 5) Global reach globe in the Contact section ----------
+  safe('contact globe', () => {
+    const host = $('#contact-globe');
+    if (!host || typeof window.Globe !== 'function' || !window.topojson) return;
+
+    const destinations = [
+      { lat: 51.5072, lng: -0.1276 },   // London
+      { lat: 40.7128, lng: -74.0060 },  // New York
+      { lat: 35.6762, lng: 139.6503 },  // Tokyo
+      { lat: 1.3521, lng: 103.8198 },   // Singapore
+      { lat: -33.8688, lng: 151.2093 }, // Sydney
+      { lat: 25.2048, lng: 55.2708 },   // Dubai
+      { lat: 48.8566, lng: 2.3522 },    // Paris
+      { lat: -23.5505, lng: -46.6333 }  // Sao Paulo
+    ];
+    const origin = { lat: -7.7956, lng: 110.3695 }; // Yogyakarta
+    const arcs = destinations.map(point => ({
+      startLat: origin.lat, startLng: origin.lng,
+      endLat: point.lat, endLng: point.lng
+    }));
+    const markers = [origin, ...destinations];
+    const globe = Globe()(host)
+      .backgroundColor('rgba(0,0,0,0)')
+      .showAtmosphere(true)
+      .atmosphereColor('#f1ebe1')
+      .atmosphereAltitude(.14)
+      .globeMaterial(new THREE.MeshPhongMaterial({
+        color: '#171715', shininess: 0, transparent: true, opacity: .96
+      }))
+      .arcsData(arcs)
+      .arcColor(() => 'rgba(241,235,225,.9)')
+      .arcStroke(.45)
+      .arcDashLength(.38)
+      .arcDashGap(3)
+      .arcDashInitialGap(() => Math.random() * 5)
+      .arcDashAnimateTime(2400)
+      .pointsData(markers)
+      .pointColor(point => point === origin ? '#ff5722' : '#f1ebe1')
+      .pointAltitude(.012)
+      .pointRadius(point => point === origin ? .22 : .13)
+      .pointsMerge(true)
+      .showGraticules(false)
+      .enablePointerInteraction(false)
+      .width(Math.max(260, host.clientWidth))
+      .height(Math.max(260, host.clientHeight));
+
+    globe.controls().autoRotate = !reduce;
+    globe.controls().autoRotateSpeed = .42;
+    globe.controls().enableZoom = false;
+    globe.controls().enablePan = false;
+
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+      .then(response => {
+        if (!response.ok) throw new Error('Could not load world map data');
+        return response.json();
+      })
+      .then(world => {
+        const countries = window.topojson.feature(world, world.objects.countries).features;
+        globe.hexPolygonsData(countries)
+          .hexPolygonResolution(3)
+          .hexPolygonMargin(.62)
+          .hexPolygonUseDots(true)
+          .hexPolygonColor(() => 'rgba(241,235,225,.72)');
+      })
+      .catch(error => console.warn('[contact globe] map data unavailable', error));
+
+    let resizeTimer;
+    const resizeGlobe = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const width = host.clientWidth;
+        const height = host.clientHeight;
+        if (width && height) globe.width(width).height(height);
+      }, 100);
+    };
+    if ('ResizeObserver' in window) new ResizeObserver(resizeGlobe).observe(host);
+    else window.addEventListener('resize', resizeGlobe, { passive: true });
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          globe.resumeAnimation();
+          observer.disconnect();
+        } else globe.pauseAnimation();
+      }, { rootMargin: '120px' });
+      observer.observe(host);
+    }
+  });
 })();
