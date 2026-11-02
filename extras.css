@@ -333,3 +333,52 @@ html.js body .veil__canvas { cursor: none; }
 @media (max-width: 600px) {
   .nav__logo.electric-logo { font-size: 30px; }
 }
+
+
+/* ---------- Target Cursor reticle ---------- */
+.cursor {
+  z-index: 95;
+  display: none;
+}
+.cursor__frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 34px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: target-cursor-spin 5s linear infinite;
+  transition: filter .2s ease;
+}
+.cursor__corner {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid rgba(255,255,255,.92);
+  filter: drop-shadow(0 0 3px rgba(255,255,255,.32));
+}
+.cursor__corner--tl { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.cursor__corner--tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+.cursor__corner--br { right: 0; bottom: 0; border-left: 0; border-top: 0; }
+.cursor__corner--bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+.cursor.is-target .cursor__frame {
+  animation: none;
+  filter: drop-shadow(0 0 5px rgba(255,255,255,.28));
+}
+.cursor.is-target .cursor__corner {
+  width: 14px;
+  height: 14px;
+  border-width: 2px;
+  border-color: #fff;
+}
+@keyframes target-cursor-spin {
+  to { rotate: 360deg; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .cursor { display: block; }
+  html.js body, html.js a, html.js button { cursor: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor__frame { animation: none; }
+}
