@@ -226,58 +226,47 @@
     scrollTrigger: { trigger: '.contact', start: 'top 70%' }
   });
 
-  // ---------- Target Cursor: corner reticle locks onto interactive elements ----------
-  if (finePointer && hasGsap) {
+  // ---------- Target Cursor: direct pointer tracking, never blocks draggable canvas interactions ----------
+  if (finePointer) {
     const cursor = $('.cursor');
     const frame = $('.cursor__frame', cursor);
-    const cursorX = gsap.quickTo(cursor, 'x', { duration: .22, ease: 'power3.out' });
-    const cursorY = gsap.quickTo(cursor, 'y', { duration: .22, ease: 'power3.out' });
     let activeTarget = null;
-
-    const cursorTargets = $$('a, button, .project__row, [data-cursor-target]');
-    cursorTargets.forEach(el => el.classList.add('cursor-target'));
+    const cursorTargets = $$('a, button, .project__row, [data-cursor-target]')
+      .filter(el => !el.closest('#lanyard, .lanyard, canvas'));
 
     const setTarget = el => {
       if (activeTarget === el) return;
       activeTarget = el;
       const rect = el.getBoundingClientRect();
-      gsap.to(frame, {
-        width: Math.max(34, rect.width + 16),
-        height: Math.max(34, rect.height + 16),
-        duration: .24,
-        ease: 'power3.out',
-        overwrite: true
-      });
+      if (hasGsap) {
+        gsap.to(frame, {
+          width: Math.max(34, rect.width + 16),
+          height: Math.max(34, rect.height + 16),
+          duration: .2,
+          ease: 'power3.out',
+          overwrite: true
+        });
+      } else {
+        frame.style.width = Math.max(34, rect.width + 16) + 'px';
+        frame.style.height = Math.max(34, rect.height + 16) + 'px';
+      }
       cursor.classList.add('is-target');
     };
 
     const clearTarget = el => {
       if (activeTarget !== el) return;
       activeTarget = null;
-      gsap.to(frame, {
-        width: 34,
-        height: 34,
-        duration: .2,
-        ease: 'power3.out',
-        overwrite: true
-      });
+      if (hasGsap) gsap.to(frame, { width: 34, height: 34, duration: .16, overwrite: true });
+      else { frame.style.width = '34px'; frame.style.height = '34px'; }
       cursor.classList.remove('is-target');
     };
 
-    window.addEventListener('mousemove', e => {
-      cursorX(e.clientX);
-      cursorY(e.clientY);
-      if (activeTarget) {
-        const rect = activeTarget.getBoundingClientRect();
-        gsap.to(frame, {
-          width: Math.max(34, rect.width + 16),
-          height: Math.max(34, rect.height + 16),
-          duration: .12,
-          ease: 'power2.out',
-          overwrite: true
-        });
-      }
-    });
+    // Use pointermove and direct left/top updates: no easing lag while dragging the Lanyard badge.
+    window.addEventListener('pointermove', e => {
+      if (e.pointerType === 'touch') return;
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    }, { passive: true });
 
     cursorTargets.forEach(el => {
       el.addEventListener('mouseenter', () => setTarget(el));
@@ -286,7 +275,10 @@
       el.addEventListener('blur', () => clearTarget(el));
     });
 
-    gsap.set(cursor, { x: -100, y: -100 });
+    window.addEventListener('blur', () => {
+      activeTarget = null;
+      cursor.classList.remove('is-target');
+    });
   }
 
   window.addEventListener('load', () => ScrollTrigger.refresh());
