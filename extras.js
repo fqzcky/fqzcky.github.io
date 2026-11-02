@@ -540,9 +540,7 @@
       .showAtmosphere(true)
       .atmosphereColor('#f1ebe1')
       .atmosphereAltitude(.14)
-      .globeMaterial(new THREE.MeshPhongMaterial({
-        color: '#171715', shininess: 0, transparent: true, opacity: .96
-      }))
+      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
       .arcsData(arcs)
       .arcColor(() => 'rgba(241,235,225,.9)')
       .arcStroke(.45)
