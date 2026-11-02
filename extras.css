@@ -279,3 +279,37 @@ html.js body .veil__canvas { cursor: none; }
   .tech-loop__track { animation: none !important; transform: none !important; }
   .tech-loop__viewport { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
 }
+
+
+/* ---------- 7) White electric Faiq wordmark ---------- */
+.nav__logo.electric-logo {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: flex-start;
+  color: var(--fg);
+  text-decoration: none;
+  text-shadow: 0 0 12px rgba(255,255,255,.12);
+}
+.electric-logo__word {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, #fff 0%, #f1ebe1 42%, #a9a49d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: electric-logo-sheen 4.8s ease-in-out infinite;
+}
+.electric-logo__reg { position: relative; z-index: 1; margin-left: 2px; font-size: .5em; line-height: 1; color: #f1ebe1; }
+.electric-logo__canvas {
+  position: absolute; z-index: 2; inset: -13px -15px -12px;
+  width: calc(100% + 30px); height: calc(100% + 25px);
+  overflow: visible; pointer-events: none;
+}
+@keyframes electric-logo-sheen {
+  0%, 72%, 100% { filter: brightness(1); }
+  78% { filter: brightness(1.55) drop-shadow(0 0 5px rgba(255,255,255,.65)); }
+  82% { filter: brightness(1.08); }
+  86% { filter: brightness(1.45) drop-shadow(0 0 8px rgba(255,255,255,.8)); }
+}
+@media (prefers-reduced-motion: reduce) { .electric-logo__word { animation: none; } }
