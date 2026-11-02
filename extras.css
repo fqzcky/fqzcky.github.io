@@ -313,3 +313,23 @@ html.js body .veil__canvas { cursor: none; }
   86% { filter: brightness(1.45) drop-shadow(0 0 8px rgba(255,255,255,.8)); }
 }
 @media (prefers-reduced-motion: reduce) { .electric-logo__word { animation: none; } }
+
+
+/* Increase the electric wordmark size while keeping the navbar aligned. */
+.nav__logo.electric-logo {
+  font-size: clamp(29px, 2.25vw, 35px);
+  line-height: .95;
+  letter-spacing: -.045em;
+}
+.electric-logo__reg {
+  font-size: .42em;
+  margin-left: 3px;
+}
+.electric-logo__canvas {
+  inset: -17px -19px -15px;
+  width: calc(100% + 38px);
+  height: calc(100% + 32px);
+}
+@media (max-width: 600px) {
+  .nav__logo.electric-logo { font-size: 30px; }
+}
