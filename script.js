@@ -226,58 +226,58 @@
     scrollTrigger: { trigger: '.contact', start: 'top 70%' }
   });
 
-  // ---------- Target Cursor: direct pointer tracking, never blocks draggable canvas interactions ----------
+  // ---------- Dual cursor: electric arc at rest, target reticle on interactive elements ----------
   if (finePointer) {
     const cursor = $('.cursor');
     const frame = $('.cursor__frame', cursor);
+    const arcCursor = $('.arc-cursor');
     let activeTarget = null;
-    const cursorTargets = $$('a, button, .project__row, [data-cursor-target]')
-      .filter(el => !el.closest('#lanyard, .lanyard, canvas'));
+    const cursorTargets = $$('a, button, [role="button"], input, select, textarea, .project__row, [data-cursor-target]')
+      .filter(el => !el.closest('#lanyard, .lanyard, canvas, [data-tech-text]'));
+
+    window.addEventListener('pointermove', e => {
+      if (e.pointerType === 'touch') return;
+      const x = e.clientX, y = e.clientY;
+      if (arcCursor) {
+        arcCursor.style.left = x + 'px';
+        arcCursor.style.top = y + 'px';
+        arcCursor.style.setProperty('--arc-speed', Math.min(1.35, Math.max(.7, Math.hypot(e.movementX || 0, e.movementY || 0) / 18)) + 's');
+      }
+      cursor.style.left = x + 'px';
+      cursor.style.top = y + 'px';
+    }, { passive: true });
 
     const setTarget = el => {
       if (activeTarget === el) return;
       activeTarget = el;
       const rect = el.getBoundingClientRect();
-      if (hasGsap) {
-        gsap.to(frame, {
-          width: Math.max(34, rect.width + 16),
-          height: Math.max(34, rect.height + 16),
-          duration: .2,
-          ease: 'power3.out',
-          overwrite: true
-        });
-      } else {
-        frame.style.width = Math.max(34, rect.width + 16) + 'px';
-        frame.style.height = Math.max(34, rect.height + 16) + 'px';
-      }
+      const width = Math.max(34, rect.width + 16), height = Math.max(34, rect.height + 16);
+      if (window.gsap) gsap.to(frame, { width, height, duration: .2, ease: 'power3.out', overwrite: true });
+      else { frame.style.width = width + 'px'; frame.style.height = height + 'px'; }
       cursor.classList.add('is-target');
+      if (arcCursor) arcCursor.classList.add('is-hidden');
     };
-
     const clearTarget = el => {
       if (activeTarget !== el) return;
       activeTarget = null;
-      if (hasGsap) gsap.to(frame, { width: 34, height: 34, duration: .16, overwrite: true });
+      if (window.gsap) gsap.to(frame, { width: 34, height: 34, duration: .16, overwrite: true });
       else { frame.style.width = '34px'; frame.style.height = '34px'; }
       cursor.classList.remove('is-target');
+      if (arcCursor) arcCursor.classList.remove('is-hidden');
     };
-
-    // Use pointermove and direct left/top updates: no easing lag while dragging the Lanyard badge.
-    window.addEventListener('pointermove', e => {
-      if (e.pointerType === 'touch') return;
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    }, { passive: true });
-
     cursorTargets.forEach(el => {
       el.addEventListener('mouseenter', () => setTarget(el));
       el.addEventListener('mouseleave', () => clearTarget(el));
       el.addEventListener('focus', () => setTarget(el));
       el.addEventListener('blur', () => clearTarget(el));
     });
-
     window.addEventListener('blur', () => {
       activeTarget = null;
       cursor.classList.remove('is-target');
+      if (arcCursor) arcCursor.classList.add('is-hidden');
+    });
+    window.addEventListener('focus', () => {
+      if (arcCursor && !activeTarget) arcCursor.classList.remove('is-hidden');
     });
   }
 
