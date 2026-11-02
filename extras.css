@@ -476,3 +476,12 @@ html.js body .veil__canvas { cursor: none; }
 .contact__globe canvas {
   filter: contrast(1.12) brightness(1.12) saturate(1.08);
 }
+
+
+/* ---------- Tech Text character treatment: preserve original typography ---------- */
+[data-tech-text] .tech-char { display: inline; white-space: pre; }
+[data-tech-text].tech-text-running { text-shadow: 0 0 14px rgba(255, 255, 255, .16); }
+[data-tech-text].tech-text-running em .tech-char { text-shadow: 0 0 12px rgba(255, 87, 34, .24); }
+@media (prefers-reduced-motion: reduce) {
+  [data-tech-text] .tech-char { text-shadow: none !important; }
+}
