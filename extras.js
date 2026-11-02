@@ -594,20 +594,20 @@
           .height(height)
           .backgroundColor('rgba(0,0,0,0)')
           .showAtmosphere(true)
-          .atmosphereColor('#f1ebe1')
-          .atmosphereAltitude(.11)
-          .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
+          .atmosphereColor('#ff754f')
+          .atmosphereAltitude(.19)
+          .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
           .arcsData(arcs)
-          .arcColor(() => 'rgba(241,235,225,.9)')
-          .arcStroke(mobile ? .32 : .42)
+          .arcColor(() => ['#ff6845', '#fff1dc', '#ff9b75'])
+          .arcStroke(mobile ? .48 : .58)
           .arcDashLength(.34)
           .arcDashGap(4)
           .arcDashInitialGap(() => Math.random() * 5)
           .arcDashAnimateTime(3200)
           .pointsData(markers)
-          .pointColor(point => point === origin ? '#ff5722' : '#f1ebe1')
+          .pointColor(point => point === origin ? '#ff5722' : '#ffffff')
           .pointAltitude(.012)
-          .pointRadius(mobile ? .11 : .14)
+          .pointRadius(mobile ? .15 : .18)
           .pointsMerge(true)
           .showGraticules(false)
           .enablePointerInteraction(false);
@@ -619,7 +619,7 @@
         globe.controls().enablePan = false;
 
         // Country dot overlay is desktop-only and optional; base globe remains visible if it fails.
-        if (!mobile) {
+        {
           const topoScript = document.createElement('script');
           topoScript.src = 'https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js';
           topoScript.async = true;
@@ -632,10 +632,10 @@
               .then(world => {
                 if (!globe || !window.topojson) return;
                 globe.hexPolygonsData(window.topojson.feature(world, world.objects.countries).features)
-                  .hexPolygonResolution(2)
-                  .hexPolygonMargin(.68)
+                  .hexPolygonResolution(mobile ? 2 : 3)
+                  .hexPolygonMargin(.58)
                   .hexPolygonUseDots(true)
-                  .hexPolygonColor(() => 'rgba(241,235,225,.68)');
+                  .hexPolygonColor(() => 'rgba(255,255,255,.94)');
               })
               .catch(error => console.warn('[contact globe] country overlay unavailable', error));
           };
