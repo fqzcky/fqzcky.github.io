@@ -671,61 +671,37 @@
     } else initialize();
   });
 
-  // ---------- 6) Tech Text: restrained character decode on first reveal ----------
-  safe('tech text animation', () => {
+
+  // ---------- 6) Tech Text: pointer-driven letter outlines and selection frame ----------
+  safe('tech text interaction', () => {
     const targets = $$('[data-tech-text]');
-    if (!targets.length || reduce) return;
-    const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/{}[]*+-=';
-    const wrapTextNodes = element => {
-      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
-      const nodes = [];
-      while (walker.nextNode()) if (walker.currentNode.nodeValue.trim()) nodes.push(walker.currentNode);
-      nodes.forEach(node => {
-        const fragment = document.createDocumentFragment();
-        Array.from(node.nodeValue).forEach(char => {
-          const span = document.createElement('span');
-          span.className = 'tech-char';
-          span.textContent = char;
-          span.dataset.final = char;
-          fragment.appendChild(span);
-        });
-        node.parentNode.replaceChild(fragment, node);
+    if (!targets.length) return;
+    targets.forEach(target => {
+      if (target.dataset.techReady) return;
+      target.dataset.techReady = 'true';
+      const original = target.textContent;
+      target.setAttribute('aria-label', original);
+      target.setAttribute('role', 'text');
+      target.textContent = '';
+      Array.from(original).forEach(char => {
+        const span = document.createElement('span');
+        span.className = 'tech-char';
+        span.textContent = char === ' ' ? '\u00a0' : char;
+        span.dataset.char = char;
+        target.appendChild(span);
       });
-    };
-    targets.forEach(element => {
-      wrapTextNodes(element);
-      let started = false;
-      const run = () => {
-        if (started) return;
-        started = true;
-        const chars = $$('.tech-char', element);
-        const visibleChars = chars.filter(char => char.dataset.final.trim());
-        const duration = 760;
-        const startTime = performance.now();
-        const tick = now => {
-          const progress = Math.min(1, (now - startTime) / duration);
-          const resolved = Math.floor(progress * visibleChars.length);
-          visibleChars.forEach((char, index) => {
-            if (index < resolved) char.textContent = char.dataset.final;
-            else if (Math.random() > .28) {
-              const finalChar = char.dataset.final;
-              const pool = /[a-z]/i.test(finalChar) ? glyphs.slice(0, 26) : glyphs;
-              char.textContent = pool[Math.floor(Math.random() * pool.length)];
-            }
-          });
-          if (progress < 1) requestAnimationFrame(tick);
-          else chars.forEach(char => { char.textContent = char.dataset.final; });
-        };
-        element.classList.add('tech-text-running');
-        requestAnimationFrame(tick);
-        window.setTimeout(() => element.classList.remove('tech-text-running'), duration + 180);
+      const letters = $$('.tech-char', target).filter(el => el.dataset.char.trim());
+      const activate = letter => {
+        letters.forEach(item => item.classList.toggle('is-active', item === letter));
       };
-      if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver(entries => {
-          if (entries.some(entry => entry.isIntersecting)) { run(); observer.disconnect(); }
-        }, { threshold: .18, rootMargin: '0px 0px -5% 0px' });
-        observer.observe(element);
-      } else run();
+      letters.forEach(letter => {
+        letter.addEventListener('mouseenter', () => activate(letter));
+        letter.addEventListener('focus', () => activate(letter));
+      });
+      target.addEventListener('mouseleave', () => activate(null));
+      target.addEventListener('blur', event => {
+        if (!target.contains(event.relatedTarget)) activate(null);
+      });
     });
   });
 })();
