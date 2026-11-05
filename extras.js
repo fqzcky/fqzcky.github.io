@@ -355,7 +355,7 @@
     if (hint) hint.textContent = fine.matches ? 'hover' : 'drag your finger over';
     if (reduce) return;                               // reduced motion: just the normal colour photo
 
-    const DARK = '#100d0b', LIGHT = '#f1ebe1';
+    const DARK = '#0F3D3A', LIGHT = '#F5DABF';
     const BAYER = (() => {                            // 8 x 8 ordered-dither matrix, values 0..63
       let m = [[0, 2], [3, 1]];
       for (let n = 2; n < 8; n *= 2) {
@@ -578,17 +578,17 @@
           .height(height)
           .backgroundColor('rgba(0,0,0,0)')
           .showAtmosphere(true)
-          .atmosphereColor('#ff754f')
+          .atmosphereColor('#f5dabf')
           .atmosphereAltitude(.16)
           .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
           .arcsData(arcs)
-          .arcColor(() => ['#ff6845', '#fff1dc'])
+          .arcColor(() => ['#f5dabf', '#ffffff'])
           .arcStroke(mobile ? .32 : .48)
           .arcDashLength(.34)
           .arcDashGap(4)
           .arcDashAnimateTime(4200)
           .pointsData([origin, ...destinations])
-          .pointColor(point => point === origin ? '#ff5722' : '#ffffff')
+          .pointColor(point => point === origin ? '#f5dabf' : '#ffffff')
           .pointAltitude(.01)
           .pointRadius(mobile ? .10 : .14)
           .pointsMerge(true)
