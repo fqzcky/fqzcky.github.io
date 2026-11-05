@@ -600,6 +600,10 @@
         globe.controls().autoRotateSpeed = mobile ? .18 : .26;
         globe.controls().enableZoom = false;
         globe.controls().enablePan = false;
+        globe.arcCurveResolution(32);
+        new IntersectionObserver(es => {
+          es[0].isIntersecting ? globe.resumeAnimation() : globe.pauseAnimation();
+        }, { rootMargin: '80px 0px' }).observe(host);
 
         // Cap device pixel ratio to keep the animated WebGL canvas light on phones.
         const renderer = globe.renderer && globe.renderer();
