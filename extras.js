@@ -355,7 +355,7 @@
     if (hint) hint.textContent = fine.matches ? 'hover' : 'drag your finger over';
     if (reduce) return;                               // reduced motion: just the normal colour photo
 
-    const DARK = '#0F3D3A', LIGHT = '#F5DABF';
+    const DARK = '#6C151E', LIGHT = '#F5DABF';
     const BAYER = (() => {                            // 8 x 8 ordered-dither matrix, values 0..63
       let m = [[0, 2], [3, 1]];
       for (let n = 2; n < 8; n *= 2) {
