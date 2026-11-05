@@ -514,19 +514,26 @@
     });
   });
 
-  // ---------- 5) Lazy-loaded global-reach globe (robust CDN fallback) ----------
+  // ---------- 5) Lightweight contact globe ----------
   safe('contact globe', () => {
     const host = $('#contact-globe');
     if (!host) return;
 
+    // Phones/tablets use a CSS-only static globe: no WebGL, Three.js, or extra CDN requests.
+    const mobileQuery = window.matchMedia('(max-width: 820px), (pointer: coarse)');
+    if (mobileQuery.matches) {
+      host.classList.add('is-static-globe');
+      return;
+    }
+
     let initialized = false;
     let globe = null;
     let resizeObserver = null;
+    let visible = false;
 
     const loadGlobeLibrary = () => {
       if (typeof window.Globe === 'function') return Promise.resolve();
       if (window.__faiqGlobeLibraryPromise) return window.__faiqGlobeLibraryPromise;
-
       const sources = [
         'https://cdn.jsdelivr.net/npm/globe.gl@2.45.0/dist/globe.gl.min.js',
         'https://unpkg.com/globe.gl@2.45.0/dist/globe.gl.min.js'
@@ -536,15 +543,12 @@
           if (typeof window.Globe === 'function') return resolve();
           if (index >= sources.length) {
             window.__faiqGlobeLibraryPromise = null;
-            return reject(new Error('Globe library failed to load from both CDNs'));
+            return reject(new Error('Globe library failed to load'));
           }
           const script = document.createElement('script');
           script.src = sources[index];
           script.async = true;
-          script.onload = () => {
-            if (typeof window.Globe === 'function') resolve();
-            else trySource(index + 1);
-          };
+          script.onload = () => typeof window.Globe === 'function' ? resolve() : trySource(index + 1);
           script.onerror = () => trySource(index + 1);
           document.head.appendChild(script);
         };
@@ -558,36 +562,23 @@
       initialized = true;
       try {
         await loadGlobeLibrary();
-        if (!host.isConnected || typeof window.Globe !== 'function') {
-          throw new Error('Globe host or library unavailable');
-        }
-
-        // Wait for layout to settle so the WebGL renderer receives real dimensions.
+        if (!host.isConnected || typeof window.Globe !== 'function') throw new Error('Globe host unavailable');
         await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-        const mobile = window.matchMedia('(max-width: 820px)').matches;
-        const width = Math.max(240, Math.round(host.getBoundingClientRect().width));
-        const height = Math.max(240, Math.round(host.getBoundingClientRect().height));
+        const rect = host.getBoundingClientRect();
+        const width = Math.max(240, Math.round(rect.width));
+        const height = Math.max(240, Math.round(rect.height));
         const origin = { lat: -7.7956, lng: 110.3695 };
-        const destinations = mobile ? [
-          { lat: 51.5072, lng: -0.1276 },
-          { lat: 35.6762, lng: 139.6503 },
-          { lat: 1.3521, lng: 103.8198 },
-          { lat: 25.2048, lng: 55.2708 }
-        ] : [
+        const destinations = [
           { lat: 51.5072, lng: -0.1276 },
           { lat: 40.7128, lng: -74.0060 },
           { lat: 35.6762, lng: 139.6503 },
           { lat: 1.3521, lng: 103.8198 },
-          { lat: -33.8688, lng: 151.2093 },
-          { lat: 25.2048, lng: 55.2708 },
-          { lat: 48.8566, lng: 2.3522 },
-          { lat: -23.5505, lng: -46.6333 }
+          { lat: 25.2048, lng: 55.2708 }
         ];
         const arcs = destinations.map(point => ({
           startLat: origin.lat, startLng: origin.lng,
           endLat: point.lat, endLng: point.lng
         }));
-        const markers = [origin, ...destinations];
 
         globe = window.Globe()(host)
           .width(width)
@@ -595,58 +586,36 @@
           .backgroundColor('rgba(0,0,0,0)')
           .showAtmosphere(true)
           .atmosphereColor('#ff754f')
-          .atmosphereAltitude(.19)
+          .atmosphereAltitude(.16)
           .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
           .arcsData(arcs)
-          .arcColor(() => ['#ff6845', '#fff1dc', '#ff9b75'])
-          .arcStroke(mobile ? .48 : .58)
+          .arcColor(() => ['#ff6845', '#fff1dc'])
+          .arcStroke(.42)
           .arcDashLength(.34)
           .arcDashGap(4)
-          .arcDashInitialGap(() => Math.random() * 5)
-          .arcDashAnimateTime(3200)
-          .pointsData(markers)
+          .arcDashAnimateTime(1000000000)
+          .pointsData([origin, ...destinations])
           .pointColor(point => point === origin ? '#ff5722' : '#ffffff')
-          .pointAltitude(.012)
-          .pointRadius(mobile ? .15 : .18)
+          .pointAltitude(.01)
+          .pointRadius(.13)
           .pointsMerge(true)
           .showGraticules(false)
           .enablePointerInteraction(false);
 
-        globe.pointOfView({ lat: 12, lng: 24, altitude: mobile ? 2.35 : 2.05 }, 0);
-        globe.controls().autoRotate = !reduce && !mobile;
-        globe.controls().autoRotateSpeed = .28;
+        globe.pointOfView({ lat: 12, lng: 24, altitude: 2.1 }, 0);
+        globe.controls().autoRotate = false;
         globe.controls().enableZoom = false;
         globe.controls().enablePan = false;
-
-        // Country dot overlay is desktop-only and optional; base globe remains visible if it fails.
-        {
-          const topoScript = document.createElement('script');
-          topoScript.src = 'https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js';
-          topoScript.async = true;
-          topoScript.onload = () => {
-            fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
-              .then(response => {
-                if (!response.ok) throw new Error('World map data unavailable');
-                return response.json();
-              })
-              .then(world => {
-                if (!globe || !window.topojson) return;
-                globe.hexPolygonsData(window.topojson.feature(world, world.objects.countries).features)
-                  .hexPolygonResolution(mobile ? 2 : 3)
-                  .hexPolygonMargin(.58)
-                  .hexPolygonUseDots(true)
-                  .hexPolygonColor(() => 'rgba(255,255,255,.94)');
-              })
-              .catch(error => console.warn('[contact globe] country overlay unavailable', error));
-          };
-          topoScript.onerror = () => console.warn('[contact globe] optional country overlay failed');
-          document.head.appendChild(topoScript);
+        // Limit GPU workload on high-DPI laptops.
+        const renderer = globe.renderer && globe.renderer();
+        if (renderer && renderer.setPixelRatio) {
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
         }
 
         const resizeGlobe = () => {
-          const rect = host.getBoundingClientRect();
-          if (rect.width > 0 && rect.height > 0 && globe) {
-            globe.width(Math.round(rect.width)).height(Math.round(rect.height));
+          const box = host.getBoundingClientRect();
+          if (box.width > 0 && box.height > 0 && globe) {
+            globe.width(Math.round(box.width)).height(Math.round(box.height));
           }
         };
         if ('ResizeObserver' in window) {
@@ -662,11 +631,12 @@
 
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver(entries => {
-        if (entries.some(entry => entry.isIntersecting)) {
+        visible = entries.some(entry => entry.isIntersecting);
+        if (visible) {
           initialize();
           observer.disconnect();
         }
-      }, { rootMargin: '500px 0px' });
+      }, { rootMargin: '120px 0px' });
       observer.observe(host);
     } else initialize();
   });
