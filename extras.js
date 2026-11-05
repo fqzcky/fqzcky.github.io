@@ -514,22 +514,13 @@
     });
   });
 
-  // ---------- 5) Lightweight contact globe ----------
+  // ---------- 5) Optimized animated contact globe ----------
   safe('contact globe', () => {
     const host = $('#contact-globe');
     if (!host) return;
 
-    // Phones/tablets use a CSS-only static globe: no WebGL, Three.js, or extra CDN requests.
-    const mobileQuery = window.matchMedia('(max-width: 820px), (pointer: coarse)');
-    if (mobileQuery.matches) {
-      host.classList.add('is-static-globe');
-      return;
-    }
-
     let initialized = false;
     let globe = null;
-    let resizeObserver = null;
-    let visible = false;
 
     const loadGlobeLibrary = () => {
       if (typeof window.Globe === 'function') return Promise.resolve();
@@ -564,9 +555,11 @@
         await loadGlobeLibrary();
         if (!host.isConnected || typeof window.Globe !== 'function') throw new Error('Globe host unavailable');
         await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+        const mobile = window.matchMedia('(max-width: 820px), (pointer: coarse)').matches;
         const rect = host.getBoundingClientRect();
-        const width = Math.max(240, Math.round(rect.width));
-        const height = Math.max(240, Math.round(rect.height));
+        const width = Math.max(220, Math.round(rect.width));
+        const height = Math.max(220, Math.round(rect.height));
         const origin = { lat: -7.7956, lng: 110.3695 };
         const destinations = [
           { lat: 51.5072, lng: -0.1276 },
@@ -590,26 +583,29 @@
           .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
           .arcsData(arcs)
           .arcColor(() => ['#ff6845', '#fff1dc'])
-          .arcStroke(.42)
+          .arcStroke(mobile ? .32 : .48)
           .arcDashLength(.34)
           .arcDashGap(4)
-          .arcDashAnimateTime(1000000000)
+          .arcDashAnimateTime(4200)
           .pointsData([origin, ...destinations])
           .pointColor(point => point === origin ? '#ff5722' : '#ffffff')
           .pointAltitude(.01)
-          .pointRadius(.13)
+          .pointRadius(mobile ? .10 : .14)
           .pointsMerge(true)
           .showGraticules(false)
           .enablePointerInteraction(false);
 
-        globe.pointOfView({ lat: 12, lng: 24, altitude: 2.1 }, 0);
-        globe.controls().autoRotate = false;
+        globe.pointOfView({ lat: 12, lng: 24, altitude: mobile ? 2.35 : 2.1 }, 0);
+        globe.controls().autoRotate = !reduce;
+        globe.controls().autoRotateSpeed = mobile ? .18 : .26;
         globe.controls().enableZoom = false;
         globe.controls().enablePan = false;
-        // Limit GPU workload on high-DPI laptops.
+
+        // Cap device pixel ratio to keep the animated WebGL canvas light on phones.
         const renderer = globe.renderer && globe.renderer();
         if (renderer && renderer.setPixelRatio) {
-          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1 : 1.25));
+          renderer.setSize(width, height, false);
         }
 
         const resizeGlobe = () => {
@@ -619,8 +615,8 @@
           }
         };
         if ('ResizeObserver' in window) {
-          resizeObserver = new ResizeObserver(resizeGlobe);
-          resizeObserver.observe(host);
+          const observer = new ResizeObserver(resizeGlobe);
+          observer.observe(host);
         } else window.addEventListener('resize', resizeGlobe, { passive: true });
       } catch (error) {
         initialized = false;
@@ -631,12 +627,11 @@
 
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver(entries => {
-        visible = entries.some(entry => entry.isIntersecting);
-        if (visible) {
+        if (entries.some(entry => entry.isIntersecting)) {
           initialize();
           observer.disconnect();
         }
-      }, { rootMargin: '120px 0px' });
+      }, { rootMargin: '180px 0px' });
       observer.observe(host);
     } else initialize();
   });
